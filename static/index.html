@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/static/config.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -109,7 +108,7 @@ PR opened: fix failing checkout test</pre>
   </main>
 
   <script>
-    const API_BASE = (window.DRUFIY_API_BASE || window.location.origin).replace(/\/$/, '');
+    const API_BASE = window.DRUFIY_API_BASE || window.location.origin;
     const tokenKey = 'drufiy_access_token';
     const authStatus = document.getElementById('authStatus');
     const healthBadge = document.getElementById('healthBadge');
