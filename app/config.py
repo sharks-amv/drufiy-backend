@@ -54,6 +54,7 @@ class Settings(BaseSettings):
 
     # URLs
     frontend_url: str = "http://localhost:3000"
+    frontend_origin_regex: str | None = None
     public_backend_url: str = "http://localhost:8000"
 
     # Slack (optional — internal ops alerts, not user-facing)
