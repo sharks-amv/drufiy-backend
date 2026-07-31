@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from app.config import settings
 from main import app
 
 
@@ -24,3 +25,11 @@ def test_static_frontend_asset_served():
 
 def test_frontend_origin_regex_setting_defaults_to_none():
     assert settings.frontend_origin_regex is None
+
+
+def test_runtime_config_asset_served():
+    with TestClient(app) as client:
+        response = client.get("/static/config.js")
+
+    assert response.status_code == 200
+    assert "window.DRUFIY_API_BASE" in response.text

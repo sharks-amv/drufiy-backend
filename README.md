@@ -6,8 +6,8 @@
 
 Yes. The landing frontend in `static/index.html` can be deployed to Vercel as a static app while this FastAPI service continues to run as the API.
 
-1. Deploy this repository to Vercel as a static project. The included `vercel.json` rewrites app routes to `static/index.html`.
-2. Configure the frontend API base URL by copying `static/config.example.js` to `static/config.js` in your Vercel deployment and setting:
+1. Deploy this repository to Vercel as a static project. The included `vercel.json` explicitly uses `@vercel/static` for `static/**`, so Vercel serves the frontend instead of invoking the FastAPI backend as a serverless function.
+2. Configure the frontend API base URL in `static/config.js` by setting:
 
    ```js
    window.DRUFIY_API_BASE = "https://YOUR_BACKEND_DOMAIN";
