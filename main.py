@@ -2,11 +2,13 @@ from contextlib import asynccontextmanager
 import asyncio
 import logging
 import time
+from pathlib import Path
 from datetime import datetime, timedelta, timezone
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.logging_config import configure_logging
 from app.config import settings
@@ -16,6 +18,8 @@ from app.db import supabase
 # Must be first — replaces basicConfig with JSON formatter for Cloud Run
 configure_logging()
 logger = logging.getLogger(__name__)
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
 
 
 # ── Fix 2: recover ci_runs stuck in transient states after a server restart ───
@@ -105,6 +109,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Drufiy Backend", version="0.1.0", lifespan=lifespan)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 _cors_origins = list({
     settings.frontend_url,                # from FRONTEND_URL env var (Cloud Run)
@@ -151,6 +156,11 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={"error": "internal_error", "message": message},
     )
+
+
+@app.get("/", include_in_schema=False)
+def frontend():
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")
